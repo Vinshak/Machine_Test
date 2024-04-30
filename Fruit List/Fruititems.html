@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fruit List</title>
+    <style>
+        #message {
+            color: red;
+        }
+        button {
+            background-color: crimson;
+            color: white;
+        }
+        h2, h3 {
+            color: crimson;
+        }
+    </style>
+</head>
+<body>
+    <h2>Fruit List</h2>
+    <select id="fruitList">
+        <option value="">Select a fruit</option>
+    </select>
+    <button onclick="addFruit()">Add To List</button>
+
+    <div id="todaysFruits">
+        <h3>Today's Fruit List</h3>
+        <ul id="todaysFruitList"></ul>
+    </div>
+    
+    <div id="message"></div>
+    
+    <script>
+        var fruits = [
+            {name: "Apple", price: 80},
+            {name: "Orange", price: 90},
+            {name: "Pineapple", price: 30},
+            {name: "Grape", price: 70},
+            {name: "Mango", price: 80}
+        ];
+
+        function populateDropdown() {
+            var select = document.getElementById("fruitList");
+            fruits.forEach(function(fruit) {
+                var option = new Option(fruit.name, fruit.name);
+                select.appendChild(option);
+            });
+        }
+
+        function addFruit() {
+            var select = document.getElementById("fruitList");
+            var selectedFruit = select.value;
+            var todaysFruitList = document.getElementById("todaysFruitList");
+            var message = document.getElementById("message");
+            var alreadyAdded = false;
+
+            todaysFruitList.querySelectorAll('li').forEach(function(item) {
+                if (item.textContent.startsWith(selectedFruit)) {
+                    alreadyAdded = true;
+                }
+            });
+
+            if (selectedFruit) {
+                if (!alreadyAdded) {
+                    var fruitFound = false;
+                    fruits.forEach(function(fruit) {
+                        if (fruit.name === selectedFruit) {
+                            var li = document.createElement("li");
+                            li.textContent = selectedFruit + " - Rs." + fruit.price + "/kilo";
+                            todaysFruitList.appendChild(li);
+                            fruitFound = true;
+                        }
+                    });
+                    if (!fruitFound) {
+                        message.textContent = "Selected fruit not found in the list!";
+                    } else {
+                        message.textContent = "";
+                    }
+                } else {
+                    message.textContent = "This fruit is already in today's list!";
+                }
+            } else {
+                message.textContent = "Please select a fruit first!";
+            }
+        }
+
+        populateDropdown();
+    </script>
+</body>
+</html>
